@@ -1,21 +1,21 @@
-import axios from "axios";
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Form, Button, Alert } from 'react-bootstrap'
-import ReportIcon from '@mui/icons-material/Report';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
-import { register, handleError, userUpdateSuccess, userUpdateRequest, userUpdateError, userUpdateReset } from "../store"
+import axios from "axios"
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 
+import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Form, Button, Alert } from 'react-bootstrap'
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
+import { userUpdateSuccess, userUpdateRequest, userUpdateError, userUpdateReset } from "../store"
 
 function UserEditPage() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { id } = useParams();
-    const { userInfo, error } = useSelector((state) => state.user);
-    const { success:successUpdate, loading:loadingUpdate, error:errorUpdate } = useSelector((state) => state.user.userUpdate);
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const { id } = useParams()
+    const { userInfo } = useSelector((state) => state.user)
+    const { success:successUpdate, loading:loadingUpdate, error:errorUpdate } = useSelector((state) => state.user.userUpdate)
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
@@ -44,10 +44,10 @@ function UserEditPage() {
                 setAdmin(userInfo.isAdmin)
             }
         }
-    }, [successUpdate, navigate, dispatch]);
+    }, [successUpdate, navigate, dispatch])
 
     const submitHandler = (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         const config = {
             headers: {
@@ -60,7 +60,7 @@ function UserEditPage() {
         axios.put(`/api/users/update/${id}/`, {name, email, isAdmin}, config).then((res) => {
             dispatch(userUpdateSuccess())
         }).catch((err) => {
-            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
+            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
             dispatch(userUpdateError(payload))
         })
     }
@@ -98,7 +98,7 @@ function UserEditPage() {
                 <Button onClick={submitHandler} className="my-3 border-b-gray-400" type='submit' variant='primary'>UPDATE</Button>
             </Form>
         </FormContainer>
-    );
+    )
 }
 
 export default UserEditPage

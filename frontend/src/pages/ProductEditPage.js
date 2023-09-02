@@ -1,22 +1,23 @@
-import axios from "axios";
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Form, Button, Alert } from 'react-bootstrap'
-import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
-import { requestProduct, successProduct, errorProduct, productUpdateRequest, productUpdateSuccess, productUpdateError, productUpdateReset } from "../store"
+import axios from "axios"
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 
+import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Form, Button, Alert } from 'react-bootstrap'
+import { useParams, useNavigate } from 'react-router-dom'
+import { requestProduct, successProduct, errorProduct, 
+        productUpdateRequest, productUpdateSuccess, productUpdateError, productUpdateReset } from "../store"
 
 function ProductEditPage() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    const { id } = useParams();
-    const { userInfo, error } = useSelector((state) => state.user);
-    const {product, loading:loadingProduct, error:errorProduct} = useSelector((state) =>  state.product.value);
-    const {success:successUpdate, loading:loadingUpdate, error:errorUpdate} = useSelector((state) =>  state.product.productUpdate);
+    const { id } = useParams()
+    const { userInfo, error } = useSelector((state) => state.user)
+    const {product, loading:loadingProduct, error:errProduct} = useSelector((state) =>  state.product.value)
+    const {success:successUpdate, loading:loadingUpdate, error:errorUpdate} = useSelector((state) =>  state.product.productUpdate)
 
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
@@ -49,14 +50,14 @@ function ProductEditPage() {
                 setCountInStock(res.data.countInStock)
                 setDescription(res.data.description)
             }).catch((err) => {
-                const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
-                dispatch(errorProduct(payload));
+                const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
+                dispatch(errorProduct(payload))
             })
         }
-    }, [navigate, dispatch, successUpdate]);
+    }, [navigate, dispatch, successUpdate])
 
     const submitHandler = (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         const config = {
             headers: {
@@ -69,7 +70,7 @@ function ProductEditPage() {
         axios.put(`/api/products/update/${id}/`, {name, price, image, brand, category, countInStock, description}, config).then((res) => {
             dispatch(productUpdateSuccess())
         }).catch((err) => {
-            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
+            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
             dispatch(productUpdateError(payload))
         })
     }
@@ -107,7 +108,7 @@ function ProductEditPage() {
             {loadingUpdate && <Loader />}
             {errorUpdate && <Alert variant='danger' className='mt-2'>{errorUpdate}</Alert>}
 
-            {loadingProduct ? <Loader /> : errorProduct ? <Alert variant='danger'>{errorProduct}</Alert> : (
+            {loadingProduct ? <Loader /> : errProduct ? <Alert variant='danger'>{errProduct}</Alert> : (
                 <Form onSubmit={submitHandler} className="mt-4 border-b border-solid border-b-gray-300">
                     <Form.Group controlId='name' className="mt-3">
                         <Form.Label>
@@ -165,7 +166,7 @@ function ProductEditPage() {
                 </Form>
             )}
         </FormContainer>
-    );
+    )
 }
 
 export default ProductEditPage

@@ -1,6 +1,10 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit"
 
-const initialProductsState = {value: {products: [], loading: true, error: null, page:null, pages:null}, productDelete: {loading: true, success:false, error: null}, productCreate: {product: {}, loading: true, success: false, error: null}, topProducts: {products: [], loading:true, error:null}};
+const initialProductsState = {value: {products: [], loading: true, error: null, page:null, pages:null}, 
+    productDelete: {loading: true, success:false, error: null}, 
+    productCreate: {product: {}, loading: true, success: false, error: null}, 
+    topProducts: {products: [], loading:true, error:null}}
+
 const productsSlice = createSlice({
     name: "products",
     initialState: initialProductsState,
@@ -10,13 +14,13 @@ const productsSlice = createSlice({
             state.value.error = null
         },
         successProducts:(state, action) => {
-            state.value.products = action.payload.products;
-            state.value.page = action.payload.page;
-            state.value.pages = action.payload.pages;
+            state.value.products = action.payload.products
+            state.value.page = action.payload.page
+            state.value.pages = action.payload.pages
             state.value.loading = false
         },
         errorProducts:(state, action) => {
-            state.value.error = action.payload;
+            state.value.error = action.payload
             state.value.loading = false
         },
         productDeleteRequest: (state, action) => {
@@ -62,9 +66,11 @@ const productsSlice = createSlice({
             state.topProducts.loading = false
         },
     }
-});
+})
 
-const initialProductState = {value: {product: {}, loading:true, error:null}, productUpdate: {success: false, loading: false, error: null}};
+const initialProductState = {value: {product: {}, loading:true, error:null}, 
+    productUpdate: {success: false, loading: false, error: null}}
+
 const productSlice = createSlice({
     name: "product",
     initialState: initialProductState,
@@ -74,11 +80,11 @@ const productSlice = createSlice({
             state.value.error = null
         },
         successProduct:(state, action) => {
-            state.value.product = action.payload;
+            state.value.product = action.payload
             state.value.loading = false
         },
         errorProduct:(state, action) => {
-            state.value.error = action.payload;
+            state.value.error = action.payload
             state.value.loading = false
         },
         productUpdateRequest: (state, action) => {
@@ -99,89 +105,94 @@ const productSlice = createSlice({
             state.productUpdate.error = null
         },
     }
-});
+})
 
 const cartLocalStorage = localStorage.getItem('cartItems') ? 
-    JSON.parse(localStorage.getItem('cartItems')): [];
+    JSON.parse(localStorage.getItem('cartItems')): []
 
 const shippingLocalStorage = localStorage.getItem('shippingAddress') ? 
-    JSON.parse(localStorage.getItem('shippingAddress')): {};
+    JSON.parse(localStorage.getItem('shippingAddress')): {}
 
 const paymentLocalStorage = localStorage.getItem('paymentMethod') ? 
-    JSON.parse(localStorage.getItem('paymentMethod')): {};
+    JSON.parse(localStorage.getItem('paymentMethod')): {}
 
-const initialCartState = {cartItems: cartLocalStorage, shippingAddress: shippingLocalStorage, paymentMethod: paymentLocalStorage};
+const initialCartState = {cartItems: cartLocalStorage, shippingAddress: shippingLocalStorage, paymentMethod: paymentLocalStorage}
+
 const cartSlice = createSlice({
     name: "cart",
     initialState: initialCartState,
     reducers: {
         addCart:(state, action) => {
-            const item = action.payload;
+            const item = action.payload
             const existItem = state.cartItems.find((x) => x.product === item.product)
 
             if (existItem) {
                 for (let i = 0; i < state.cartItems.length; i++) {  
-                    if (state.cartItems[i].product === item.product) state.cartItems[i] = item;
+                    if (state.cartItems[i].product === item.product) state.cartItems[i] = item
                 }
             } else {
-                state.cartItems = [...state.cartItems, item]; 
+                state.cartItems = [...state.cartItems, item] 
             }
 
-            localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
         },
         removeCart: (state, action) => {
-            state.cartItems = state.cartItems.filter((x) => x.product !== action.payload.product);
+            state.cartItems = state.cartItems.filter((x) => x.product !== action.payload.product)
 
-            localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+            localStorage.setItem('cartItems', JSON.stringify(state.cartItems))
         },
         clearCart: (state, action) => {
             state.cartItems = []
-            localStorage.removeItem('cartItems');
+            localStorage.removeItem('cartItems')
         },
         saveAddress: (state, action) => {
-            state.shippingAddress = action.payload;
+            state.shippingAddress = action.payload
 
-            localStorage.setItem('shippingAddress', JSON.stringify(state.shippingAddress));
+            localStorage.setItem('shippingAddress', JSON.stringify(state.shippingAddress))
         },
         saveMethod: (state, action) => {
-            state.paymentMethod = action.payload;
+            state.paymentMethod = action.payload
 
-            localStorage.setItem('paymentMethod', JSON.stringify(state.paymentMethod));
+            localStorage.setItem('paymentMethod', JSON.stringify(state.paymentMethod))
         }
     }
-});
+})
 
 const userLocalStorage = localStorage.getItem('userInfo') ? 
-    JSON.parse(localStorage.getItem('userInfo')): null;
+    JSON.parse(localStorage.getItem('userInfo')): null
 
-const initialUserState = {userInfo: userLocalStorage, error: null, userList: {users: [], loading:true, error:null}, userDelete: {loading: true, success:false, error: null}, userUpdate: {success: false, loading: false, error: null}};
+const initialUserState = {userInfo: userLocalStorage, error: null, 
+        userList: {users: [], loading:true, error:null}, 
+        userDelete: {loading: true, success:false, error: null}, 
+        userUpdate: {success: false, loading: false, error: null}}
+
 const userSlice = createSlice({
     name: "user",
     initialState: initialUserState,
     reducers: {
         login: (state, action) => {
-            state.userInfo = action.payload;
-            state.error = null;
-            localStorage.setItem('userInfo', JSON.stringify(action.payload));
+            state.userInfo = action.payload
+            state.error = null
+            localStorage.setItem('userInfo', JSON.stringify(action.payload))
         },
         handleError: (state, action) => {
-            state.error = action.payload;
+            state.error = action.payload
         },
         logout: (state, action) => {
-            state.userInfo = null;
-            state.error = null;
-            localStorage.removeItem('userInfo');
-            localStorage.removeItem('shippingAddress');
+            state.userInfo = null
+            state.error = null
+            localStorage.removeItem('userInfo')
+            localStorage.removeItem('shippingAddress')
         }, 
         register: (state, action) => {
-            state.userInfo = action.payload;
-            state.error = null;
-            localStorage.setItem('userInfo', JSON.stringify(action.payload));
+            state.userInfo = action.payload
+            state.error = null
+            localStorage.setItem('userInfo', JSON.stringify(action.payload))
         },
         update: (state, action) => {
             state.userInfo = action.payload
-            state.error = null;
-            localStorage.setItem('userInfo', JSON.stringify(action.payload));
+            state.error = null
+            localStorage.setItem('userInfo', JSON.stringify(action.payload))
         },
         userListRequest: (state, action) => {
             state.userList.loading = true
@@ -227,9 +238,14 @@ const userSlice = createSlice({
             state.userUpdate.error = null
         },
     }
-});
+})
 
-const initialOrderState = {orderDeliver: {loading: true, success: false}, orderPay: {loadingPay: true, successPay: false}, newOrderInfo: {}, success: false, getOrderDetails: {}, loading:true, orderList:{orders: [], loading: true, error: null}, adminOrders: {orders: [], loading: true, error: null} };
+const initialOrderState = {orderDeliver: {loading: true, success: false}, 
+    orderPay: {loadingPay: true, successPay: false}, 
+    newOrderInfo: {}, success: false, getOrderDetails: {}, loading:true, 
+    orderList:{orders: [], loading: true, error: null}, 
+    adminOrders: {orders: [], loading: true, error: null}}
+
 const orderSlice = createSlice({
     name: "order",
     initialState: initialOrderState,
@@ -247,12 +263,12 @@ const orderSlice = createSlice({
             state.loading = false
         },
         payOrder: (state, action) => {
-            state.orderPay.loadingPay = false;
-            state.orderPay.successPay = true;
+            state.orderPay.loadingPay = false
+            state.orderPay.successPay = true
         },
         deliverOrder: (state, action) => {
-            state.orderDeliver.loading = false;
-            state.orderDeliver.success = true;
+            state.orderDeliver.loading = false
+            state.orderDeliver.success = true
         },
         orderListRequest: (state, action) => {
             state.orderList.loading = true
@@ -280,9 +296,10 @@ const orderSlice = createSlice({
             state.adminOrders.error = action.payload
         },
     }
-});
+})
 
-const initialDeleteModalState = {showModal: false, deleteId: null, method: null};
+const initialDeleteModalState = {showModal: false, deleteId: null, method: null}
+
 const deleteModalSlice = createSlice({
     name: "deleteModal",
     initialState: initialDeleteModalState,
@@ -297,14 +314,25 @@ const deleteModalSlice = createSlice({
             state.method = action.payload
         }
     }
-});
+})
 
-export const { requestProducts, successProducts, errorProducts, productDeleteRequest, productDeleteSuccess, productDeleteError, productCreateRequest, productCreateSuccess, productCreateError, productCreateReset, topProductsRequest, topProductsSuccess, topProductsError } = productsSlice.actions;
-export const { requestProduct, successProduct, errorProduct, productUpdateRequest, productUpdateSuccess, productUpdateError, productUpdateReset } = productSlice.actions;
-export const { addCart, removeCart, clearCart, saveAddress, saveMethod } = cartSlice.actions;
-export const { login, handleError, logout, register, update, userListRequest, userlistSuccess, userListError, userListReset, userDeleteRequest, userDeleteSuccess, userDeleteError, userUpdateRequest, userUpdateSuccess, userUpdateError, userUpdateReset } = userSlice.actions;
-export const { resetNewOrder, createNewOrder, getOrder, payOrder, deliverOrder, orderListRequest, orderListSuccess, orderListError, orderListReset, adminListRequest, adminListSuccess, adminListError} = orderSlice.actions;
-export const { setShowDeleteModal, setDeleteId, setMethod } = deleteModalSlice.actions;
+export const { requestProducts, successProducts, errorProducts, productDeleteRequest, 
+    productDeleteSuccess, productDeleteError, productCreateRequest, productCreateSuccess, productCreateError, productCreateReset, topProductsRequest, topProductsSuccess, topProductsError } = productsSlice.actions
+
+export const { requestProduct, successProduct, errorProduct, productUpdateRequest, 
+    productUpdateSuccess, productUpdateError, productUpdateReset } = productSlice.actions
+
+export const { addCart, removeCart, clearCart, saveAddress, saveMethod } = cartSlice.actions
+
+export const { login, handleError, logout, register, update, userListRequest,
+     userlistSuccess, userListError, userListReset, userDeleteRequest, userDeleteSuccess,
+      userDeleteError, userUpdateRequest, userUpdateSuccess, userUpdateError, userUpdateReset } = userSlice.actions
+
+export const { resetNewOrder, createNewOrder, getOrder, payOrder, deliverOrder, 
+    orderListRequest, orderListSuccess, orderListError, orderListReset, 
+    adminListRequest, adminListSuccess, adminListError} = orderSlice.actions
+
+export const { setShowDeleteModal, setDeleteId, setMethod } = deleteModalSlice.actions
 
 export const store = configureStore({
     reducer: {

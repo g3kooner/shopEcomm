@@ -1,27 +1,28 @@
-import React, { useState } from 'react'
-import { Form, Button, Col } from 'react-bootstrap'
-import paypal from '../assets/paypal.png';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
+import paypal from '../assets/paypal.png'
 import FormContainer from '../components/FormContainer'
 import CheckoutProgress from '../components/CheckoutProgress'
+
 import { saveMethod } from '../store'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Form, Button, Col } from 'react-bootstrap'
+import { useSelector, useDispatch } from 'react-redux'
 
 function PaymentPage() {
-    const { shippingAddress } = useSelector((state) => state.cart);
-    const [paymentMethod, setPaymentMethod] = useState('PayPal');
+    const { shippingAddress } = useSelector((state) => state.cart)
+    const [paymentMethod, setPaymentMethod] = useState('PayPal')
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     if (!shippingAddress.address) {
-        navigate('/shipping');
+        navigate('/shipping')
     }
 
     const submitHandler = (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
-        dispatch(saveMethod(paymentMethod));
+        dispatch(saveMethod(paymentMethod))
         navigate('/summary')
     }
 
@@ -37,7 +38,7 @@ function PaymentPage() {
                         <Form.Check onChange={(event) => setPaymentMethod(event.target.value)} className="pr-3 inline-block" type='radio' label='PayPal' id='paypal' name='paymentMethod' checked>
                             
                         </Form.Check>
-                        <img className="inline-block" src={paypal} className="w-[64px]" />
+                        <img className="inline-block w-[64px]" src={paypal} />
 
                         <span className="pl-3">Covers 202 countries or regions, 25 curriences are supported and currency exchange and charge fees are produced when non dollar curriences are paid debit and credit cards of the local cooperative bank</span>
                     </Col>

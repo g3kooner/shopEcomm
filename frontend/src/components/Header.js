@@ -1,29 +1,31 @@
+import logo from '../assets/logo.png'
+import MenuIcon from '@mui/icons-material/Menu'
+import HomeIcon from '@mui/icons-material/Home'
+import CloseIcon from '@mui/icons-material/Close'
+import PersonIcon from '@mui/icons-material/Person'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+
 import React, { useState } from 'react'
-import logo from '../assets/logo.png';
 import { Image, NavDropdown } from 'react-bootstrap'
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PersonIcon from '@mui/icons-material/Person';
-import HomeIcon from '@mui/icons-material/Home';
 import { Link, useNavigate } from "react-router-dom"
-import { logout, orderListReset, userListReset } from '../store'
 import { LinkContainer } from "react-router-bootstrap"
 import { useDispatch, useSelector } from 'react-redux'
+import { logout, orderListReset, userListReset } from '../store'
 
 function Header() {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    
     const [open, setOpen] = useState(false)
     const [input, setInput] = useState('')
 
-    const { userInfo } = useSelector((state) => state.user);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const { userInfo } = useSelector((state) => state.user)
     
     const logoutHandler = () => {
-        dispatch(logout());
-        dispatch(orderListReset());
-        dispatch(userListReset());
-        navigate('/login');
+        dispatch(logout())
+        dispatch(orderListReset())
+        dispatch(userListReset())
+        navigate('/login')
     }
 
     const submitHandler = (event) => {

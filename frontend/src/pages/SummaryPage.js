@@ -1,32 +1,33 @@
 import axios from 'axios'
-import React, { useEffect } from 'react'
-import { Button, Row, Col, ListGroup, Image, Card, Alert } from 'react-bootstrap'
-import { useNavigate, Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import CheckoutProgress from '../components/CheckoutProgress'
+
+import React, { useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import { createNewOrder, resetNewOrder, clearCart } from '../store'
+import { Button, Row, Col, ListGroup, Image, Card, Alert } from 'react-bootstrap'
 
 function SummaryPage() {
-    const { cartItems, shippingAddress, paymentMethod } = useSelector((state) => state.cart);
-    const { userInfo } = useSelector((state) => state.user);
-    const { newOrderInfo, success } = useSelector((state) => state.order);
+    const { cartItems, shippingAddress, paymentMethod } = useSelector((state) => state.cart)
+    const { userInfo } = useSelector((state) => state.user)
+    const { newOrderInfo, success } = useSelector((state) => state.order)
 
-    const subTotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2);
-    const shippingPrice = (subTotal > 100 ? 0 : 10).toFixed(2);
-    const taxPrice = ((0.13) * subTotal).toFixed(2);
-    const totalPrice = (Number(subTotal) + Number(shippingPrice) + Number(taxPrice)).toFixed(2);
+    const subTotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)
+    const shippingPrice = (subTotal > 100 ? 0 : 10).toFixed(2)
+    const taxPrice = ((0.13) * subTotal).toFixed(2)
+    const totalPrice = (Number(subTotal) + Number(shippingPrice) + Number(taxPrice)).toFixed(2)
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (success) {
-            navigate(`/orders/${newOrderInfo._id}`);
-            dispatch(clearCart());
-            dispatch(resetNewOrder());
+            navigate(`/orders/${newOrderInfo._id}`)
+            dispatch(clearCart())
+            dispatch(resetNewOrder())
         } 
-    }, [success, navigate]);
+    }, [success, navigate])
     
     const placeOrder = () => {
         const config = {
@@ -46,8 +47,8 @@ function SummaryPage() {
         }
 
         axios.post("/api/orders/add/", order, config).then((res) => {
-            dispatch(createNewOrder(res.data));
-        });
+            dispatch(createNewOrder(res.data))
+        })
     }
 
     return (
@@ -97,7 +98,7 @@ function SummaryPage() {
                                                         {item.qty} x ${item.price} = ${(item.qty * item.price).toFixed(2)}
                                                     </Col>
                                                 </Row>
-                                            </ListGroup.Item>);
+                                            </ListGroup.Item>)
                                         })}
                                     </ListGroup>
                                 )

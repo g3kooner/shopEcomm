@@ -1,30 +1,28 @@
-import React, { useState, useEffect } from 'react'
-import { Form, Button} from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import CheckoutProgress from '../components/CheckoutProgress'
+
 import { saveAddress } from '../store'
+import React, { useState } from 'react'
+import { Form, Button} from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 
 function ShippingPage() {
-    const [validated, setValidated] = useState(false);
-    const { shippingAddress } = useSelector((state) => state.cart);
+    const [city, setCity] = useState(shippingAddress.city)
+    const [address, setAddress] = useState(shippingAddress.address)
+    const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
+    const [country, setCountry] = useState(shippingAddress.country)
+    const { shippingAddress } = useSelector((state) => state.cart)
 
-    const [address, setAddress] = useState(shippingAddress.address);
-    const [city, setCity] = useState(shippingAddress.city);
-    const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
-    const [country, setCountry] = useState(shippingAddress.country);
-
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const submitHandler = (event) => {
-        event.preventDefault();
-        const form = event.currentTarget;
-        console.log(form);
+        event.preventDefault()
+        const form = event.currentTarget
 
         if (form.checkValidity() === false) {
-            event.stopPropagation();
+            event.stopPropagation()
         } else {
             dispatch(saveAddress({address, city, postalCode, country}))
             navigate('/payment')        

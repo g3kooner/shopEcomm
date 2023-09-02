@@ -1,31 +1,32 @@
-import axios from "axios";
-import React, { useState, useEffect } from 'react'
-import { Form, Button, Row, Col, Alert, Table } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
-import ReportIcon from '@mui/icons-material/Report';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
-import { update, handleError, orderListRequest, orderListSuccess, orderListError } from "../store"
+import axios from "axios"
 import Loader from '../components/Loader'
+import CancelIcon from '@mui/icons-material/Cancel'
+import ReportIcon from '@mui/icons-material/Report'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+
+import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { LinkContainer } from 'react-router-bootstrap'
+import { useSelector, useDispatch } from 'react-redux'
+import { Form, Button, Row, Col, Alert, Table } from 'react-bootstrap'
+import { update, handleError, orderListRequest, orderListSuccess, orderListError } from "../store"
 
 function ProfilePage() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMessage] = useState('');
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [message, setMessage] = useState('')
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const { userInfo, error } = useSelector((state) => state.user);
-    const { orders, loading:loadingOrders, error:errorOrders } = useSelector((state) => state.order.orderList);
-    const dispatch = useDispatch();
+    const { userInfo, error } = useSelector((state) => state.user)
+    const { orders, loading:loadingOrders, error:errorOrders } = useSelector((state) => state.order.orderList)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (!userInfo) {
-            navigate('/login');
+            navigate('/login')
         } else {
             const config = {
                 headers: {
@@ -34,28 +35,28 @@ function ProfilePage() {
             }
 
             axios.get("/api/users/profile/", config).then((res) => {
-                setName(res.data.name);
-                setEmail(res.data.email);
-            });
+                setName(res.data.name)
+                setEmail(res.data.email)
+            })
 
             dispatch(orderListRequest())
 
             axios.get(`/api/orders/myorders`, config).then((res) => {   
-                dispatch(orderListSuccess(res.data));
+                dispatch(orderListSuccess(res.data))
             }).catch((err) => {
-                const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
-                dispatch(orderListError(payload));
+                const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
+                dispatch(orderListError(payload))
             })
         }  
-    }, [navigate, userInfo]);
+    }, [navigate, userInfo])
 
     const submitHandler = (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         if (password != confirmPassword) {
             setMessage("Passwords do not match")
         } else { 
-            setMessage("");
+            setMessage("")
 
             const config = {
                 headers: {
@@ -64,9 +65,9 @@ function ProfilePage() {
             }
 
             axios.put('/api/users/profile/update/', {'name': name, 'email': email, 'password': password}, config).then((res) => {
-                dispatch(update(res.data));
+                dispatch(update(res.data))
             }).catch((err) => {
-                dispatch(handleError(err));
+                dispatch(handleError(err))
             })
         }
     }

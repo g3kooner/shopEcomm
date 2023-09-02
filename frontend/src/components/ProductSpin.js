@@ -1,25 +1,26 @@
+import axios from 'axios'
+
+import { Link } from 'react-router-dom'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { Carousel, Image, Alert } from 'react-bootstrap'
-import axios from 'axios'
 import { topProductsRequest, topProductsSuccess, topProductsError } from "../store"
 
 import Loader from './Loader'
 
 function ProductSpin() {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
     const {products, loading, error} = useSelector((state) => state.products.topProducts) 
 
     useEffect(() => {
         dispatch(topProductsRequest())
 
         axios.get(`/api/products/top`).then((res) => {
-            dispatch(topProductsSuccess(res.data));
+            dispatch(topProductsSuccess(res.data))
         }).catch((err) => {
-            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
-            dispatch(topProductsError(payload));
-        });
+            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
+            dispatch(topProductsError(payload))
+        })
     }, [dispatch])
 
     return (

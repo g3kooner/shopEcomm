@@ -1,36 +1,38 @@
-import axios from "axios";
-import React, { useState,useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Form, Button, Row, Col, Alert } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
-import { login, handleError } from "../store"
+import axios from "axios"
 import FormContainer from '../components/FormContainer'
 
-function LoginPage() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-    const redirect = window.location.href.includes('redirect') ? '/' + window.location.href.split('=')[1] : '/';
+import { Link } from 'react-router-dom'
+import { login, handleError } from "../store"
+import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Form, Button, Row, Col, Alert } from 'react-bootstrap'
 
-    const { userInfo, error} = useSelector((state) => state.user);
-    const dispatch = useDispatch();
+function LoginPage() {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const redirect = window.location.href.includes('redirect') ? '/' + window.location.href.split('=')[1] : '/'
+
+    const { userInfo, error} = useSelector((state) => state.user)
 
     useEffect(() => {
         if (userInfo) {
-            navigate(redirect);
+            navigate(redirect)
         }   
     }, [navigate, userInfo, redirect])
 
     const submitHandler = (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         axios.post('/api/users/login/', {'username': email, 'password': password}).then((res) => {
-            dispatch(login(res.data));
+            dispatch(login(res.data))
 
-            navigate(redirect);
+            navigate(redirect)
         }).catch((err) => {
-            dispatch(handleError(err));
+            dispatch(handleError(err))
         })
     }
 

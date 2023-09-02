@@ -1,44 +1,45 @@
-import axios from "axios";
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Form, Button, Row, Col, Alert } from 'react-bootstrap'
-import ReportIcon from '@mui/icons-material/Report';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
-import { register, handleError } from "../store"
+import axios from "axios"
+import ReportIcon from '@mui/icons-material/Report'
 import FormContainer from '../components/FormContainer'
 
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { register, handleError } from "../store"
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Form, Button, Row, Col, Alert } from 'react-bootstrap'
+
 function RegisterPage() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMessage] = useState('');
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [message, setMessage] = useState('')
 
-    const navigate = useNavigate();
-    const redirect = window.location.href.includes('redirect') ? '/' + window.location.href.split('=')[1] : '/';
+    const navigate = useNavigate()
+    const redirect = window.location.href.includes('redirect') ? '/' + window.location.href.split('=')[1] : '/'
 
-    const { userInfo, error} = useSelector((state) => state.user);
-    const dispatch = useDispatch();
+    const { userInfo, error} = useSelector((state) => state.user)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if (userInfo) {
-            navigate(redirect);
+            navigate(redirect)
         }   
-    }, [navigate, userInfo, redirect]);
+    }, [navigate, userInfo, redirect])
 
     const submitHandler = (event) => {
-        event.preventDefault();
+        event.preventDefault()
         if (password != confirmPassword) {
             setMessage("Passwords do not match")
         } else { 
-            setMessage("");
+            setMessage("")
             axios.post('/api/users/register/', {'name': name, 'email': email, 'password': password}).then((res) => {
-                dispatch(register(res.data));
+                dispatch(register(res.data))
 
-                navigate(redirect);
+                navigate(redirect)
             }).catch((err) => {
-                dispatch(handleError(err));
+                dispatch(handleError(err))
             })
         }
     }
@@ -85,7 +86,7 @@ function RegisterPage() {
                     <Form.Label>
                         Confirm Password
                     </Form.Label>
-                    <Form.Control required={true} className={message && 'border-red-400 border-2'} required type='password' placeholder='Confirm Password' value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)}>
+                    <Form.Control required={true} className={message && 'border-red-400 border-2'} type='password' placeholder='Confirm Password' value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)}>
 
                     </Form.Control>
                 </Form.Group>
@@ -102,7 +103,7 @@ function RegisterPage() {
                 </Col>
             </Row>
         </FormContainer>
-    );
+    )
 }
 
 export default RegisterPage

@@ -1,33 +1,35 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
-import { Link } from "react-router-dom"
-import { Row, Col, Image, ListGroup, Form, Alert } from "react-bootstrap"
-import Loader from '../components/Loader'
-import { requestProduct, successProduct, errorProduct, addCart } from "../store"
-import Rating  from "../components/Rating"
 import axios from 'axios'
+import Loader from '../components/Loader'
+import Rating  from "../components/Rating"
+
+import { Link } from "react-router-dom"
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Row, Col, Image, ListGroup, Form, Alert } from "react-bootstrap"
+import { requestProduct, successProduct, errorProduct } from "../store"
 
 function ProductPage() {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const [qty, setQty] = useState(1);
-    const dispatch = useDispatch();
+    const { id } = useParams()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    
+    const [qty, setQty] = useState(1)
     const {product, loading, error} = useSelector((state) =>  state.product.value)
 
     useEffect(() => {   
         dispatch(requestProduct())
 
         axios.get(`/api/products/${id}`).then((res) => {
-            dispatch(successProduct(res.data));
+            dispatch(successProduct(res.data))
         }).catch((err) => {
-            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
-            dispatch(errorProduct(payload));
-        });
-    }, [dispatch]);
+            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
+            dispatch(errorProduct(payload))
+        })
+    }, [dispatch])
 
     const addToCardHandler = () => {
-        navigate(`/cart/${id}?qty=${qty}`);
+        navigate(`/cart/${id}?qty=${qty}`)
     }
     
     return (

@@ -1,26 +1,28 @@
 import axios from 'axios'
-import React, { useState, useEffect } from 'react'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { Button, Row, Col, ListGroup, Image, Card, Alert } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
 import Loader from '../components/Loader'
+import CancelIcon from '@mui/icons-material/Cancel'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+
+import React, { useState, useEffect } from 'react'
 import { PayPalButton } from 'react-paypal-button-v2'
+import { useSelector, useDispatch } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
 import { getOrder, payOrder, deliverOrder } from '../store'
+import { useParams, useNavigate, Link } from 'react-router-dom'
+import { Button, Row, Col, ListGroup, Image, Card, Alert } from 'react-bootstrap'
+
 
 function OrderPage() {
-    const { id } = useParams();
-    const { userInfo } = useSelector((state) => state.user);
-    const { getOrderDetails, loading } = useSelector((state) => state.order);
-    const { successPay, loadingPay } = useSelector((state) => state.order.orderPay);
-    const { loading:loadingDeliver, success:successDeliver } = useSelector((state) => state.order.orderDeliver);
+    const { id } = useParams()
+    const { userInfo } = useSelector((state) => state.user)
+    const { getOrderDetails, loading } = useSelector((state) => state.order)
+    const { successPay, loadingPay } = useSelector((state) => state.order.orderPay)
+    const { loading:loadingDeliver, success:successDeliver } = useSelector((state) => state.order.orderDeliver)
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    const [sdkReady, setSdkReady] = useState(false);
+    const [sdkReady, setSdkReady] = useState(false)
 
     const config = {
         headers: {
@@ -34,9 +36,9 @@ function OrderPage() {
         script.src = 'https://www.paypal.com/sdk/js?client-id=AfmvwIWNvUHM1kGVvS-s3Vrwf75AAE-4zRUMP54tQKDs22177BV-Lw8ExiGKQMTO0MvF_nhtAav1vrax'
         script.async = true
         script.onload = () => {
-            setSdkReady(true);
+            setSdkReady(true)
         }
-        document.body.appendChild(script);
+        document.body.appendChild(script)
     }
 
     useEffect(() => {
@@ -44,8 +46,8 @@ function OrderPage() {
 
         if (!getOrderDetails || successPay || getOrderDetails._id !== Number(id) || successDeliver) {
             axios.get(`/api/orders/${id}/`, config).then((res) => {
-                dispatch(getOrder(res.data));
-            });
+                dispatch(getOrder(res.data))
+            })
         } 
         
         if (!getOrderDetails.isPaid) {
@@ -55,7 +57,7 @@ function OrderPage() {
                 setSdkReady(true)
             }
         }
-    }, [dispatch, id, getOrderDetails, successPay, successDeliver]);
+    }, [dispatch, id, getOrderDetails, successPay, successDeliver])
 
     const successPaymentHandler = (paymentResult) => {
         axios.put(`/api/orders/${id}/pay/`, {}, config).then((res) => {
@@ -139,7 +141,7 @@ function OrderPage() {
                                                         {item.qty} x ${item.price} = ${(item.qty * item.price).toFixed(2)}
                                                     </Col>
                                                 </Row>
-                                            </ListGroup.Item>);
+                                            </ListGroup.Item>)
                                         })}
                                     </ListGroup>
                                 )

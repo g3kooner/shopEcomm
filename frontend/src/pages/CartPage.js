@@ -1,19 +1,20 @@
-import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { Row, Col, ListGroup, Image, Form, Button, Card, Alert} from 'react-bootstrap'
-import { LinkContainer} from 'react-router-bootstrap'
-import { useParams, useNavigate } from 'react-router-dom';
-import { addCart, removeCart } from "../store"
 import axios from 'axios'
 
+import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { addCart, removeCart } from "../store"
+import { LinkContainer} from 'react-router-bootstrap'
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Row, Col, ListGroup, Image, Form, Button, Card, Alert} from 'react-bootstrap'
+
 function CartPage() {
-    const { id } = useParams();
-    const qty = window.location.search ? Number(window.location.search.split('=')[1]) : 1;
+    const { id } = useParams()
+    const qty = window.location.search ? Number(window.location.search.split('=')[1]) : 1
     
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const cartItems = useSelector((state) =>  state.cart.cartItems);    
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const cartItems = useSelector((state) =>  state.cart.cartItems)   
 
     useEffect(() => {
         if (id) {
@@ -25,18 +26,17 @@ function CartPage() {
                     price: res.data.price, 
                     countInStock: res.data.countInStock,
                     qty: qty,
-                }));
-            });
+                }))
+            })
         }
-    }, [dispatch, id, qty]);
+    }, [dispatch, id, qty])
 
     const removeFromCartHandler = (id) => {
-        dispatch(removeCart({product: id}));
-        console.log('remove:', id);
+        dispatch(removeCart({product: id}))
     }
 
     const checkoutHandler = () => {
-        navigate('/login?redirect=shipping');
+        navigate('/login?redirect=shipping')
     }
 
     return (
@@ -79,7 +79,7 @@ function CartPage() {
                                         </Col>
                                     </Row>
                                 </ListGroup.Item>
-                            );
+                            )
                         })}
                     </ListGroup>
                 )}

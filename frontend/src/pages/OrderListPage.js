@@ -1,24 +1,25 @@
-import axios from "axios";
+import axios from "axios"
+import Loader from '../components/Loader'
+import CancelIcon from '@mui/icons-material/Cancel'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+
 import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Table, Button, Alert } from 'react-bootstrap'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { adminListRequest, adminListSuccess, adminListError } from "../store"
-import Loader from '../components/Loader'
 
 function OrderListPage() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { orders, loading, error} = useSelector((state) => state.order.adminOrders)
-    const { userInfo } = useSelector((state) => state.user);
+    const { userInfo } = useSelector((state) => state.user)
 
     useEffect(() => {
         if (!userInfo || !userInfo.isAdmin) navigate('/login')
 
-        dispatch(adminListRequest());
+        dispatch(adminListRequest())
 
         const config = {
             headers: {
@@ -27,10 +28,10 @@ function OrderListPage() {
         }
 
         axios.get(`/api/orders`, config).then((res) => {   
-            dispatch(adminListSuccess(res.data));
+            dispatch(adminListSuccess(res.data))
         }).catch((err) => {
-            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
-            dispatch(adminListError(payload));
+            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
+            dispatch(adminListError(payload))
         })
     }, [dispatch, navigate])
 

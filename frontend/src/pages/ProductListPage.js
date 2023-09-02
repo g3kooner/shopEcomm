@@ -1,24 +1,29 @@
-import axios from "axios";
-import React, { useState, useEffect } from 'react'
-import { LinkContainer } from 'react-router-bootstrap'
-import { Table, Button, Row, Col, Alert } from 'react-bootstrap'
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux'
-import { errorProducts, requestProducts, setDeleteId, setMethod, setShowDeleteModal, successProducts, productCreateRequest, productCreateSuccess, productCreateError, productCreateReset } from "../store"
+import axios from "axios"
 import Loader from '../components/Loader'
 import Paginator from '../components/Paginator'
+import ModeEditIcon from '@mui/icons-material/ModeEdit'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+
+import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { LinkContainer } from 'react-router-bootstrap'
+import { Table, Button, Row, Col, Alert } from 'react-bootstrap'
+import { errorProducts, requestProducts, setDeleteId, setMethod, setShowDeleteModal, 
+        successProducts, productCreateRequest, productCreateSuccess, productCreateError, productCreateReset } from "../store"
 
 function ProductListPage() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {products, loading, error, pages, page} = useSelector((state) =>  state.products.value)
-    const { loading:loadingDelete, success:successDelete, error:errorDelete} = useSelector((state) => state.products.productDelete)
-    const { product:createdProduct, loading:loadingCreate, success:successCreate, error:errorCreate} = useSelector((state) => state.products.productCreate)
-    const { userInfo } = useSelector((state) => state.user);
 
-    const keyword = window.location.search ? window.location.search : '';
+    const { userInfo } = useSelector((state) => state.user)
+    const { loading:loadingDelete, success:successDelete, 
+            error:errorDelete} = useSelector((state) => state.products.productDelete)
+    const { product:createdProduct, loading:loadingCreate, success:successCreate, 
+            error:errorCreate} = useSelector((state) => state.products.productCreate)
+
+    const keyword = window.location.hash.toString() !== '#/admin/productlist' ? window.location.hash.split('productlist')[1] : ''
 
     useEffect(() => {
         if (!userInfo || !userInfo.isAdmin) navigate('/login')
@@ -33,9 +38,9 @@ function ProductListPage() {
         axios.get(`/api/products${keyword}`).then((res) => {
             dispatch(successProducts(res.data))
         }).catch((err) => {
-            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
+            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
             dispatch(errorProducts(payload))
-        });
+        })
     }, [dispatch, successDelete, successCreate, keyword])
 
     const deleteHandler = (id) => {
@@ -56,7 +61,7 @@ function ProductListPage() {
         axios.post('/api/products/create/', {}, config).then((res) => {
             dispatch(productCreateSuccess(res.data))
         }).catch((err) => {
-            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
+            const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
             dispatch(productCreateError(payload))
         })
     }
@@ -115,7 +120,7 @@ function ProductListPage() {
                             })}
                         </tbody>
                     </Table>
-                    <Paginator pages={pages} page={page} isAdmin={true} />
+                    <Paginator pages={pages} page={page} isAdmin={true} keyword={keyword} />
                 </div>
             )}
         </div>

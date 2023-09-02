@@ -51,7 +51,7 @@ function App() {
         </Container>
       </main>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App

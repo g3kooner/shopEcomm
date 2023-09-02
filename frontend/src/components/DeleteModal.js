@@ -1,14 +1,17 @@
 import React from 'react'
 import axios from 'axios'
-import ErrorIcon from '@mui/icons-material/Error';
+import ErrorIcon from '@mui/icons-material/Error'
+
 import { useSelector, useDispatch } from 'react-redux'
-import { setShowDeleteModal, userDeleteRequest, userDeleteSuccess, userDeleteError, productDeleteRequest, productDeleteError, productDeleteSuccess } from '../store'
+import { setShowDeleteModal, userDeleteRequest, userDeleteSuccess, userDeleteError, 
+        productDeleteRequest, productDeleteError, productDeleteSuccess } from '../store'
 
 function DeleteModal() {
     const dispatch = useDispatch()
+    
     const deleteId = useSelector((state) => state.deleteModal.deleteId)
     const method = useSelector((state) => state.deleteModal.method)
-    const { userInfo } = useSelector((state) => state.user);
+    const { userInfo } = useSelector((state) => state.user)
 
     const deleteHandler = () => {
         const config = {
@@ -25,7 +28,7 @@ function DeleteModal() {
             axios.delete(`/api/users/delete/${deleteId}/`, config).then((res) => {
                 dispatch(userDeleteSuccess())
             }).catch((err) => {
-                const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
+                const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
                 dispatch(userDeleteError(payload))
             })
         } else if (method === 'product') {
@@ -36,7 +39,7 @@ function DeleteModal() {
             axios.delete(`/api/products/delete/${deleteId}/`, config).then((res) => {
                 dispatch(productDeleteSuccess())
             }).catch((err) => {
-                const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message;
+                const payload = err.response && err.response.data.detail ? err.response.data.detail : err.message
                 dispatch(productDeleteError(payload))
             })
         }

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Link } from 'react-router-dom'
 
 function CheckoutProgress({stage1, stage2, stage3, stage4}) {
