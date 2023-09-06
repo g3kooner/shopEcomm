@@ -7,3 +7,21 @@ secure user registration/authentication features. Track and view your orders fro
 ## Usage and Setup
 1) Create, set-up, and activate your python virtual environment so you can install the necessary python modules listed in the ```requirements.txt``` file. Make sure to fill in the ```.env``` variables, a template file has been provided to see what is needed.
 2) cd into the frontend and run ```npm install``` to retrieve the packages. After a successfull installation, ```npm start``` will run the app in development. Make sure to also run ```python manage.py runserver``` in the backend directory to start the server.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+ ![signIn](/demoimg/signin.png)
+ 
+ ![homePage](/demoimg/homepage.png)
+ 
+ ![cartPage](/demoimg/cart.png)
+ 
+ ![orderPage](/demoimg/orderdetails.png)
+ 
+ ![products](/demoimg/products.png)
+
+ ![orders](/demoimg/ordersAdmin.png)
+
+ ![users](/demoimg/usersAdmin.png)
+ 
+----------------------------------------------------------------------------------------------------------------------------------
