@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 function ShippingPage() {
+    const { shippingAddress } = useSelector((state) => state.cart)
     const [city, setCity] = useState(shippingAddress.city)
     const [address, setAddress] = useState(shippingAddress.address)
     const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
     const [country, setCountry] = useState(shippingAddress.country)
-    const { shippingAddress } = useSelector((state) => state.cart)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
